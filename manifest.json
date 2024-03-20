@@ -1,0 +1,27 @@
+{
+  "name": "Glitch autocompletions",
+  "version": "1.1",
+  "manifest_version": 3,
+  "permissions": [
+    "scripting",
+    "webNavigation",
+    "storage",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+  	"https://glitch.com/*"
+  ],
+  "icons": {
+    "48": "Icon33.png",
+    "64": "Icon66.png",
+    "128": "Icon132.png",
+    "256": "Icon264.png"
+  },
+  "action": {
+    "default_title": "Site Editor",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "script.js"
+  }
+}
