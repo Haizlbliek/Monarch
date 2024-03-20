@@ -1,0 +1,19 @@
+@font-face {
+  font-family: pico-8;
+  src: url(https://cdn.glitch.global/cfdccbf0-ae74-4796-8c85-3c8c2079a3d9/pico-8-mono-reversed.ttf?v=1682379461066);
+}
+
+.theme-cosmos {
+	--variable-shim-primary: #C2C3C7 !important;
+    --variable-shim-comment: #83769C !important;
+    --variable-shim-keyword: #ff77a8 !important;/*#79e6d9;*/
+    --variable-shim-string: #fddd88 !important;
+    --variable-shim-number: #6eca98 !important;
+    --variable-shim-operator: #fff1e8 !important;
+    --variable-shim-property: #c2c3c7 !important;
+	--variable-shim-primary-background: #1d2b53 !important;
+}
+
+.CodeMirror pre {
+  font-family: pico-8 !important;
+}
