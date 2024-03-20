@@ -10,19 +10,14 @@ A buggy chrome extension for glitch.com autocompletions
 
 ## Things it does do
 - Adds autocompletions
+- You CAN select other autocompletions!
 - Use `tab` to autofill the top one
 - New variables are included
 - Other files are included
 
 ## Things it does NOT do
-- You CAN'T select other autocompletions
 - It DOESN'T care about the HTML file includes
-- It will NOT auto-update when new changes come out.
-
-## Plans
-- I do plan on updating this, but I have no idea when. Please don't count on it.
-- I want to fix the crashing.
-- I want to fill out my plans list.
+- It will NOT auto-update the extension when new changes come out on GitHub
 
 ## FAQ
 ### Why does it have so many errors?
@@ -36,3 +31,11 @@ This extension is made for chrome. It will probably only work on chrome.
 
 ### What is the Input autocompletion?
 - Input is [Engine.js](https://engine-js.glitch.me/). I use it with most of my projects, so it is included.
+
+### How did I do it?
+First off, look at the code.
+
+Secondly:
+- I did a lot of using the dev console while on the glitch editor.
+- `application.editor()` is your friend.
+- Lots of hours staring at minified code.
