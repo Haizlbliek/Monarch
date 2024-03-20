@@ -10,6 +10,7 @@ var code = "";
 var fullCode = "";
 
 let currentCompletion = null;
+let completionIndex = 0;
 
 const variableRegex = /(\s|;)var (\w+)/g;
 const constantRegex = /(\s|;)const (\w+)/g;
@@ -82,9 +83,6 @@ const defaultCompletions = [
 	"true",
 	"try",
 	"typeof",
-	// "var",
-	// "void",
-	// "volatile",
 	"while",
 	"with",
 	"yield",
@@ -107,7 +105,7 @@ const defaultCompletions = [
 	"String",
 	"toString",
 	"undefined",
-	// "valueOf",
+	"valueOf",
 	"alert",
 	"all",
 	"anchor",
@@ -123,7 +121,6 @@ const defaultCompletions = [
 	"close",
 	"closed",
 	"confirm",
-	// "constructor",
 	"crypto",
 	"decodeURI",
 	"decodeURIComponent",
@@ -156,46 +153,34 @@ const defaultCompletions = [
 	"hidden",
 	"history",
 	"image",
-	"images",
 	"offscreenBuffering",
 	"open",
 	"opener",
-	"option",
 	"outerHeight",
 	"outerWidth",
-	"packages",
 	"pageXOffset",
 	"pageYOffset",
 	"parent",
 	"parseFloat",
 	"parseInt",
-	"password",
-	"pkcs11",
-	"plugin",
 	"prompt",
-	"propertyIsEnum",
-	"radio",
-	"reset",
 	"screenX",
 	"screenY",
 	"scroll",
-	"secure",
-	"select",
 	"self",
 	"setInterval",
 	"setTimeout",
 	"status",
-	"submit",
-	"taint",
-	"text",
-	"textarea",
 	"top",
 	"unescape",
-	"untaint",
 	"window",
 	"Input",
 	"requestAnimationFrame"
 ];
+
+for (let x in window) {
+	defaultCompletions.push(x);
+}
 
 const extendedCompletions = {
 	document: [
@@ -425,9 +410,13 @@ function ready() {
 	var extraSpace = document.createElement("div");
 	extraSpace.classList.add("ac-space");
 	lines.appendChild(extraSpace);
+	
+	application.notifyAutosave = function () {}
+	console.clear();
 }
 
 function waitForReady() {
+application.notifyAutosave = function () {}
 	presentation = document.querySelector(".CodeMirror-lines > div");
 
 	if (presentation) {
@@ -441,7 +430,6 @@ function waitForReady() {
 		}
 
 		ready();
-		console.clear();
 
 		return;
 	}
@@ -517,10 +505,6 @@ function getAllCode() {
 function updateCompletions() {
 	if (!autocomplete) return;
 
-	while (autocomplete.hasChildNodes()) {
-		autocomplete.removeChild(autocomplete.firstChild);
-	}
-
 	var editingText = getEditingText();
 
 	completions = [...defaultCompletions];
@@ -566,12 +550,6 @@ function updateCompletions() {
 	if (completions.length == 0) {
 		currentCompletion = null;
 		return true;
-	}
-
-	currentCompletion = completions[0];
-
-	for (let completion of completions) {
-		addCompletion(completion);
 	}
 }
 
@@ -637,7 +615,7 @@ function getEditingText() {
 	return "";
 }
 
-function addCompletion(completion) {
+function addCompletion(completion,completionId) {
 	var editingTextLength = getEditingText().split(".");
 	editingTextLength = editingTextLength[editingTextLength.length - 1].length + 1;
 
@@ -657,7 +635,7 @@ function addCompletion(completion) {
 
 	node.title = completion[3] ?? "";
 
-	if (completion == currentCompletion) {
+	if (completionId == completionIndex) {
 		node.style.background = "#202020";
 	}
 }
@@ -673,6 +651,7 @@ function update() {
 
 	if (!cursor) {
 		autocomplete.style.visibility = "hidden";
+		completionIndex = 0;
 
 		return;
 	}
@@ -681,13 +660,32 @@ function update() {
 
 	autocomplete.style.left = cursor.style.left;
 	autocomplete.style.top = ((+cursor.style.top.slice(0, -2)) + 16) + "px";
+	
+	if (completionIndex >= completions.length) completionIndex = completions.length - 1;
+	if (completionIndex < 0) completionIndex = 0;
+	
+	currentCompletion = completions[completionIndex] ?? completions[0];
+
+	while (autocomplete.hasChildNodes()) {
+		autocomplete.removeChild(autocomplete.firstChild);
+	}
+	for (let completionId in completions) {
+		addCompletion(completions[completionId], completionId);
+	}
+}
+
+function updateCompletionsHandler() {
+	updateCompletions();
+
+	return Pass;
 }
 
 // function insertScript() {
 // 	console.log(application.selectedFile().content());
 // }
 
-setInterval(updateCompletions, 100);
+// setInterval(updateCompletions, 100);
+application.editor()._handlers.change.push(updateCompletionsHandler);
 
 update();
 waitForReady();
@@ -736,10 +734,8 @@ setInterval(function () {
 	setCookie(theme, document.body.classList.item(0));
 }, 10000);
 
-application.notifyAutosave = function () {}
-
 // Tab Autocompletion
-const Pass = {
+let Pass = {
   toString: function() {
 	  return "CodeMirror.Pass"
   }
@@ -755,10 +751,7 @@ function getCharacter(line, char) {
 
 application.editor().addKeyMap({
 	Tab: function (E) {
-		if (application.editor().getSelection()) {
-			application.editor().indentSelection();
-			return Pass;
-		}
+		if (application.editor().getSelection()) return Pass; // Return to default tabbing
 
 		const cursor = getCursorPosition();
 		let replacer = "  ";
@@ -776,13 +769,28 @@ application.editor().addKeyMap({
 			}
 		}
 		E.replaceRange(replacer, Pos(cursor.y, cursor.x + offsetChar), Pos(cursor.y, cursor.x), "+delete");
+	},
+	"Ctrl-Space": function (E) {
+		console.log("Ctrl-Space");
+	},
+	"Up": function (E) {
+		if (completions.length <= 0) return Pass;
+
+		completionIndex -= 1;
+		if (completionIndex < 0) completionIndex += completions.length;
+	},
+	"Down": function (E) {
+		if (completions.length <= 0) return Pass;
+
+		completionIndex += 1;
+		if (completionIndex >= completions.length) completionIndex -= completions.length;
 	}
 });
 
-// Alt + Left Click
 const identifierBreaking = " ;,.<>/?:'\"\\|]}[{-+=)(*&^%#@!`~";
 const identifierRegex = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
 
+// Alt + Left Click
 document.body.onmousedown = function (e) {
 	if (e.button == 0 && e.altKey) {
 		const cursor = getCursorPosition();
@@ -814,3 +822,7 @@ document.body.onmousedown = function (e) {
 		}
 	}
 }
+
+import("https://glitch.com/edit/assets/codemirror.bff8dd02.js").then(a=>{
+	Pass = a.c.exports.Pass;
+});
