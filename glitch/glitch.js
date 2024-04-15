@@ -640,12 +640,12 @@ function addCompletion(completion,completionId) {
 	}
 }
 
+let lastEditingText = "";
+
 function update() {
 	requestAnimationFrame(update);
 
-	if (!started) {
-		return;
-	}
+	if (!started) return;
 
 	var cursor = getCursor();
 
@@ -655,8 +655,6 @@ function update() {
 
 		return;
 	}
-
-	autocomplete.style.visibility = completions.length == 0 ? "hidden" : "visible";
 
 	autocomplete.style.left = cursor.style.left;
 	autocomplete.style.top = ((+cursor.style.top.slice(0, -2)) + 16) + "px";
@@ -672,6 +670,13 @@ function update() {
 	for (let completionId in completions) {
 		addCompletion(completions[completionId], completionId);
 	}
+
+	let editingText = getEditingText();
+	if (editingText != lastEditingText) {
+		hideCompletions = false;
+		updateCompletionsHandler();
+	}
+	lastEditingText = editingText;
 }
 
 function updateCompletionsHandler() {
@@ -749,41 +754,67 @@ function getCharacter(line, char) {
 	return application.editor().getLine(line)?.[char] || "";
 }
 
-application.editor().addKeyMap({
-	Tab: function (E) {
-		if (application.editor().getSelection()) return Pass; // Return to default tabbing
+var hideCompletions = false;
+function completionsVisible() {
+	return completions.length != 0 && !hideCompletions;
+}
 
-		const cursor = getCursorPosition();
-		let replacer = "  ";
-		let offsetChar = 0;
+function everyFrame() {
+	requestAnimationFrame(everyFrame);
+	
+	if (!started) return;
+	autocomplete.style.visibility = completionsVisible() ? "visible" : "hidden";
+}
 
-		if (currentCompletion) {
-			replacer = currentCompletion[0];
+everyFrame();
 
-			const line = application.editor().getLine(cursor.y);
+function autocompleteCallback(E) {
+	if (!completionsVisible()) return Pass;
 
-			for (offsetChar = -replacer.length; offsetChar < 0; offsetChar++) {
-				if (replacer.substr(0, -offsetChar) == line.substr(cursor.x + offsetChar, -offsetChar)) {
-					break;
-				}
+	const cursor = getCursorPosition();
+	let replacer = "  ";
+	let offsetChar = 0;
+
+	if (currentCompletion) {
+		replacer = currentCompletion[0];
+
+		const line = application.editor().getLine(cursor.y);
+
+		for (offsetChar = -replacer.length; offsetChar < 0; offsetChar++) {
+			if (replacer.substr(0, -offsetChar) == line.substr(cursor.x + offsetChar, -offsetChar)) {
+				break;
 			}
 		}
-		E.replaceRange(replacer, Pos(cursor.y, cursor.x + offsetChar), Pos(cursor.y, cursor.x), "+delete");
-	},
+	}
+	E.replaceRange(replacer, Pos(cursor.y, cursor.x + offsetChar), Pos(cursor.y, cursor.x), "+delete");
+}
+
+application.editor().addKeyMap({
+	"Tab": autocompleteCallback,
+	"Enter": autocompleteCallback,
 	"Ctrl-Space": function (E) {
-		console.log("Ctrl-Space");
+		hideCompletions = false;
 	},
 	"Up": function (E) {
-		if (completions.length <= 0) return Pass;
+		if (!completionsVisible()) return Pass;
 
 		completionIndex -= 1;
 		if (completionIndex < 0) completionIndex += completions.length;
+
+		updateCompletionsHandler();
 	},
 	"Down": function (E) {
-		if (completions.length <= 0) return Pass;
+		if (!completionsVisible()) return Pass;
 
 		completionIndex += 1;
 		if (completionIndex >= completions.length) completionIndex -= completions.length;
+
+		updateCompletionsHandler();
+	},
+	"Esc": function (E) {
+		hideCompletions = true;
+
+		return Pass;
 	}
 });
 
