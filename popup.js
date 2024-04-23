@@ -12,7 +12,7 @@ function send() {
 	} else if (themeName == "grayscale") {
 		func = themeGrayscale;
 	}
-	chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+	chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
 		chrome.scripting.executeScript({
 			target: {tabId: tabs[0].id},
 			func
@@ -55,4 +55,4 @@ function themeGrayscale() {
 	document.cookie = "theme=theme-gray;path=/";
 }
 
-button.onclick = send;
+theme.onchange = send;

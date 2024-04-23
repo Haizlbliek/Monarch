@@ -24,15 +24,10 @@ const variables = [];
 
 
 const defaultCompletions = [
-	"abstract",
-	"arguments",
 	"await",
-	"boolean",
 	"break",
-	"byte",
 	"case",
 	"catch",
-	"char",
 	"class",
 	"const",
 	"constructor",
@@ -41,16 +36,12 @@ const defaultCompletions = [
 	"default",
 	"delete",
 	"do",
-	"double",
 	"else",
-	"enum",
 	"eval",
 	"export",
 	"extends",
 	"false",
-	"final",
 	"finally",
-	"float",
 	"for",
 	"function",
 	"goto",
@@ -59,27 +50,18 @@ const defaultCompletions = [
 	"import",
 	"in",
 	"instanceof",
-	"int",
-	"interface",
 	"let",
-	"long",
-	"native",
 	"new",
 	"null",
-	"package",
 	"private",
 	"protected",
 	"public",
 	"return",
-	"short",
 	"static",
 	"super",
 	"switch",
-	"synchronized",
 	"this",
 	"throw",
-	"throws",
-	"transient",
 	"true",
 	"try",
 	"typeof",
@@ -90,97 +72,39 @@ const defaultCompletions = [
 	"Date",
 	"eval",
 	"function",
-	"hasOwnProperty",
 	"Infinity",
 	"isFinite",
 	"isNaN",
 	"isPrototypeOf",
-	"length",
 	"Math",
 	"NaN",
-	"name",
 	"Number",
 	"Object",
 	"prototype",
 	"String",
-	"toString",
 	"undefined",
+	"toString",
 	"valueOf",
 	"alert",
-	"all",
-	"anchor",
-	"anchors",
-	"area",
-	"assign",
-	"blur",
-	"button",
-	"checkbox",
 	"clearInterval",
 	"clearTimeout",
-	"clientInformation",
-	"close",
-	"closed",
 	"confirm",
-	"crypto",
-	"decodeURI",
-	"decodeURIComponent",
-	"defaultStatus",
 	"document",
-	"element",
-	"elements",
-	"embed",
-	"embeds",
-	"encodeURI",
-	"encodeURIComponent",
-	"escape",
-	"event",
-	"fileUpload",
-	"focus",
-	"form",
-	"forms",
-	"frame",
 	"innerHeight",
 	"innerWidth",
-	"layer",
-	"layers",
-	"link",
 	"location",
-	"mimeTypes",
-	"navigate",
 	"navigator",
-	"frames",
-	"frameRate",
-	"hidden",
 	"history",
-	"image",
-	"offscreenBuffering",
 	"open",
-	"opener",
-	"outerHeight",
-	"outerWidth",
-	"pageXOffset",
-	"pageYOffset",
-	"parent",
 	"parseFloat",
 	"parseInt",
 	"prompt",
-	"screenX",
-	"screenY",
-	"scroll",
-	"self",
 	"setInterval",
 	"setTimeout",
-	"status",
-	"top",
-	"unescape",
 	"window",
 	"Input",
 	"requestAnimationFrame"
 ];
-
-for (let x in window) {
-	defaultCompletions.push(x);
-}
 
 const extendedCompletions = {
 	document: [
@@ -420,15 +344,6 @@ application.notifyAutosave = function () {}
 	presentation = document.querySelector(".CodeMirror-lines > div");
 
 	if (presentation) {
-		var get = document.querySelector("#app-preview");
-		if (get) {
-			get.classList.add("hidden");
-		}
-		get = document.querySelector(".iframe-wrapper");
-		if (get) {
-			get.parentElement.removeChild(get);
-		}
-
 		ready();
 
 		return;
@@ -658,6 +573,7 @@ function update() {
 
 	autocomplete.style.left = cursor.style.left;
 	autocomplete.style.top = ((+cursor.style.top.slice(0, -2)) + 16) + "px";
+	autocomplete.style.visibility = completionsVisible() ? "visible" : "hidden";
 	
 	if (completionIndex >= completions.length) completionIndex = completions.length - 1;
 	if (completionIndex < 0) completionIndex = 0;
@@ -673,7 +589,6 @@ function update() {
 
 	let editingText = getEditingText();
 	if (editingText != lastEditingText) {
-		hideCompletions = false;
 		updateCompletionsHandler();
 	}
 	lastEditingText = editingText;
@@ -690,7 +605,11 @@ function updateCompletionsHandler() {
 // }
 
 // setInterval(updateCompletions, 100);
-application.editor()._handlers.change.push(updateCompletionsHandler);
+// application.editor()._handlers.change.push(updateCompletionsHandler);
+application.editor().on("change", function () {
+	hideCompletions = false;
+	updateCompletionsHandler();
+});
 
 update();
 waitForReady();
@@ -759,15 +678,6 @@ function completionsVisible() {
 	return completions.length != 0 && !hideCompletions;
 }
 
-function everyFrame() {
-	requestAnimationFrame(everyFrame);
-	
-	if (!started) return;
-	autocomplete.style.visibility = completionsVisible() ? "visible" : "hidden";
-}
-
-everyFrame();
-
 function autocompleteCallback(E) {
 	if (!completionsVisible()) return Pass;
 
@@ -789,27 +699,21 @@ function autocompleteCallback(E) {
 	E.replaceRange(replacer, Pos(cursor.y, cursor.x + offsetChar), Pos(cursor.y, cursor.x), "+delete");
 }
 
+application.appPreviewVisible(false);
 application.editor().addKeyMap({
 	"Tab": autocompleteCallback,
 	"Enter": autocompleteCallback,
-	"Ctrl-Space": function (E) {
-		hideCompletions = false;
-	},
 	"Up": function (E) {
 		if (!completionsVisible()) return Pass;
 
 		completionIndex -= 1;
 		if (completionIndex < 0) completionIndex += completions.length;
-
-		updateCompletionsHandler();
 	},
 	"Down": function (E) {
 		if (!completionsVisible()) return Pass;
 
 		completionIndex += 1;
 		if (completionIndex >= completions.length) completionIndex -= completions.length;
-
-		updateCompletionsHandler();
 	},
 	"Esc": function (E) {
 		hideCompletions = true;
@@ -821,9 +725,8 @@ application.editor().addKeyMap({
 const identifierBreaking = " ;,.<>/?:'\"\\|]}[{-+=)(*&^%#@!`~";
 const identifierRegex = /^[_$a-zA-Z\xA0-\uFFFF][_$a-zA-Z0-9\xA0-\uFFFF]*$/;
 
-// Alt + Left Click
 document.body.onmousedown = function (e) {
-	if (e.button == 0 && e.altKey) {
+	if (e.button == 0 && e.altKey) { // Alt + Left Click
 		const cursor = getCursorPosition();
 
 		let selectedText = "";
