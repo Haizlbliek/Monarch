@@ -1,3 +1,9 @@
+const settings = {
+	assetScale: 4,
+	theme: "theme-cosmos"
+};
+
+
 var presentation;
 
 var started = false;
@@ -299,6 +305,19 @@ for (let word of ["onblur","onclick","onerror","onfocus","onkeydown","onkeypress
 	defaultCompletions.push([word, "event"])
 }
 
+function loadSettings() {
+	settings.assetScale = +localStorage.getItem("ac-asset-scale") ?? 4;
+	settings.theme = localStorage.getItem("ac-theme") ?? "theme-cosmos";
+}
+
+function saveSettings() {
+	localStorage.setItem("ac-asset-scale", settings.assetScale);
+	localStorage.setItem("ac-theme", settings.theme);
+}
+
+
+
+
 function getCursor() {
 	return document.querySelector(".CodeMirror-cursor");
 }
@@ -323,7 +342,8 @@ function getFileExtension() {
 	return splits[splits.length - 1];
 }
 
-function ready() {
+const secretFilePath = ".autocompletion-folders";
+async function ready() {
 	autocomplete = document.createElement("div");
 	autocomplete.classList.add("CodeMirror-AutoComplete")
 	presentation.appendChild(autocomplete);
@@ -337,10 +357,60 @@ function ready() {
 	
 	application.notifyAutosave = function () {}
 	console.clear();
+
+	const secretFile = application.fileByPath(secretFilePath);
+	if (secretFile) {
+		application.writeToFile(secretFile, secretFile.content() + "-");
+	} else {
+		application.writeToFile(await application.newFile(secretFilePath), "");
+	}
+
+	application.showAssets().then(assetsLoaded);
+}
+
+function assetsLoaded() {
+	const assetsWrap = document.querySelector(".assets-wrap");
+	const assetsElement = assetsWrap.children[1];
+
+	const assetScale = document.createElement("div");
+	const assetScaleLabel = document.createElement("label");
+	const assetScaleRange = document.createElement("input");
+
+	assetScale.classList.add("ac-asset-scale");
+	assetScaleLabel.innerText = "Scale ";
+
+	assetScaleRange.type = "range";
+	assetScaleRange.min = "1";
+	assetScaleRange.max = "8";
+	assetScaleRange.step = "1";
+	assetScaleRange.value = settings.assetScale;
+	document.body.style.setProperty("--ac-asset-scale", settings.assetScale);
+	assetScaleRange.oninput = function () {
+		const newScale = +assetScaleRange.value;
+		document.body.style.setProperty("--ac-asset-scale", newScale);
+	}
+	assetScaleRange.onchange = function () {
+		settings.assetScale = +assetScaleRange.value;
+		saveSettings();
+	}
+
+	assetScale.appendChild(assetScaleLabel);
+	assetScale.appendChild(assetScaleRange);
+
+	assetsWrap.children[0].appendChild(assetScale);
+
+	// const folder = document.createElement("div");
+	// folder.classList.add("ac-folder");
+	// folder.appendChild(assetsElement.children[0]);
+	// folder.appendChild(assetsElement.children[0]);
+	// folder.appendChild(assetsElement.children[0]);
+	// folder.appendChild(assetsElement.children[0]);
+	// assetsElement.insertBefore(folder, assetsElement.children[0]);
 }
 
 function waitForReady() {
-application.notifyAutosave = function () {}
+	application.notifyAutosave = function () {}
+
 	presentation = document.querySelector(".CodeMirror-lines > div");
 
 	if (presentation) {
@@ -562,6 +632,12 @@ function update() {
 
 	if (!started) return;
 
+	if (settings.theme != document.body.classList.item(0)) {
+		settings.theme = document.body.classList.item(0);
+		saveSettings();
+	}
+	
+
 	var cursor = getCursor();
 
 	if (!cursor) {
@@ -611,52 +687,12 @@ application.editor().on("change", function () {
 	updateCompletionsHandler();
 });
 
+loadSettings();
 update();
 waitForReady();
 
-function setCookie(cname, cvalue, exdays) {
-  let expires;
-  if (exdays == "never") {
-    const d = new Date();
-    d.setTime(d.getTime() + 34560000000); // 400 days later
-    expires = "expires="+ d.toUTCString();
-  } else {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    expires = "expires="+ d.toUTCString();
-  }
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname, defaultValue = "") {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(';');
-  for(let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return defaultValue;
-}
-
-function clearCookie(cname) {
-  document.cookie = cname + "=;expires=0;path=/";
-}
-
-var theme = getCookie("theme");
-if (theme) {
-	document.body.classList.remove(...document.body.classList);
-	document.body.classList.add(theme);
-}
-
-setInterval(function () {
-	setCookie(theme, document.body.classList.item(0));
-}, 10000);
+document.body.classList.remove(...document.body.classList);
+document.body.classList.add(settings.theme);
 
 // Tab Autocompletion
 let Pass = {

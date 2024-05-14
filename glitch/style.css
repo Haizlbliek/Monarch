@@ -9,19 +9,41 @@
 	--variable-shim-primary-background: #160f19 !important;
 }
 
-.css-kw2ud9, .css-16csbhs, .css-1ta7cha, .css-vurnku model-viewer {
-    height: 100px !important;
+body {
+	--ac-asset-scale: 4;
 }
 
 .css-kw2ud9 {
     image-rendering: pixelated;
 }
 
-.css-h0vfq, .css-1ta7cha, .css-rfx2tg, .css-h0vfqq, .css-16csbhs, .css-1ta7cha {
-    width: 100px !important;
+.css-guid9s  {
+	margin: 0 !important;
 }
 
-./*keOPiE, .iBrmCI, .css-1l8ub88, .keOPiE {
+.css-15i5045 {
+    max-height: calc(100% - 48px);
+    overflow-y: scroll;
+}
+
+.css-kw2ud9, .css-16csbhs, .css-1ta7cha, .css-vurnku model-viewer {
+    height: calc(var(--ac-asset-scale) * 50px) !important;
+}
+
+.css-kw2ud9, .css-h0vfq, .css-1ta7cha, .css-rfx2tg, .css-h0vfqq, .css-16csbhs, .css-1ta7cha {
+    width: calc(var(--ac-asset-scale) * 50px) !important;
+}
+
+.css-1s46b4i {
+	image-rendering: pixelated;
+	background: repeating-conic-gradient(rgba(204, 204, 204, 0.2) 0%, rgba(204, 204, 204, 0.2) 25%, rgba(153, 153, 153, 0.2) 0%, rgba(153, 153, 153, 0.2) 50%) 50% center / 22px 22px;
+}
+
+.pop-over-hero {
+	background: var(--theme-ui-colors-background) !important;
+}
+
+/*.keOPiE, .iBrmCI, .css-1l8ub88, .keOPiE {
     display: none !important;
 }*/
 
@@ -51,6 +73,20 @@
     align-content: flex-start;
     flex-direction: column;
 /*    overflow: hidden;*/
+}
+
+.ac-asset-scale {
+}
+
+.ac-folder {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 13px;
+    margin: 0;
+    flex-wrap: wrap;
+    outline: 4px double #00ff00;
+    outline-width: thick;
+    box-sizing: border-box;
 }
 
 .ac-completion {
