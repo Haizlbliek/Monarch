@@ -1,12 +1,12 @@
 chrome.webNavigation.onDOMContentLoaded.addListener(async ({ tabId, url }) => {
-	if (url.substring(0, 18) == 'https://glitch.com') {
+	if (url.startsWith("https://glitch.com")) {
 		chrome.scripting.insertCSS({
 			target: { tabId },
-			files: [ "glitch/style.css" ]
+			files: [ "glitch.css" ]
 		});
 		chrome.scripting.executeScript({
 			target: { tabId },
-			files: [ "glitch/glitch.js" ],
+			files: [ "glitch.js" ],
 			world: "MAIN"
 		});
 	}

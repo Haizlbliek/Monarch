@@ -1,6 +1,6 @@
 {
-  "name": "Glitch autocompletions",
-  "version": "1.1",
+  "name": "Monarch",
+  "version": "4.0",
   "manifest_version": 3,
   "permissions": [
     "scripting",
@@ -18,7 +18,7 @@
     "256": "Icon264.png"
   },
   "action": {
-    "default_title": "Site Editor",
+    "default_title": "Monarch",
     "default_popup": "popup.html"
   },
   "background": {
