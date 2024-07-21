@@ -326,20 +326,13 @@ function getCode() {
 	return document.querySelector(".CodeMirror-code");
 }
 
-function getActiveFile() {
-	return document.querySelector(".filetree-child.file.active");
-}
-
 function getCursorPosition() {
 	var cursor = application.getCursor();
 	return {x: cursor.ch, y: cursor.line};
 }
 
 function getFileExtension() {
-	var file = getActiveFile();
-	if (!file) return;
-	var splits = file.title.split(".");
-	return splits[splits.length - 1];
+	return application.currentFileInfo().extension;
 }
 
 const secretFilePath = ".autocompletion-folders";
