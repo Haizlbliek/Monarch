@@ -506,8 +506,8 @@
 
 		assetScaleRange.type = "range";
 		assetScaleRange.min = "1";
-		assetScaleRange.max = "8";
-		assetScaleRange.step = "1";
+		assetScaleRange.max = "9";
+		assetScaleRange.step = "0.1";
 		assetScaleRange.value = settings.assetScale;
 		document.body.style.setProperty("--ac-asset-scale", settings.assetScale);
 		assetScaleRange.oninput = function () {
