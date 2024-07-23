@@ -527,3 +527,27 @@ body.ac-show-hidden-files .filetree-child.file.hidden {
 body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type {
 	text-decoration: underline;
 }
+.ac-asset-modifiers button.ac-asset-group-button, .ac-asset-modifiers button.ac-select-button {
+    box-sizing: border-box;
+    appearance: none;
+    display: inline-block;
+    border: none;
+    padding: 6px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 11px;
+    color: var(--theme-ui-colors-gray-4);
+    background-color: var(--theme-ui-colors-background);
+    border-radius: 10px;
+}
+
+.ac-asset-scale label {
+    font-size: 13px;
+}
+
+.ac-asset-scale {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
