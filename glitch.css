@@ -266,7 +266,8 @@ body {
 }
 
 .ac-selected {
-	outline: 4px solid yellow;
+	outline: 4px solid var(--theme-ui-colors-shareButton);
+    border-radius: 3px;
 }
 
 .css-15i5045.ac-active .css-vurnku {
