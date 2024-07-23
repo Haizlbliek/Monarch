@@ -524,9 +524,6 @@ body.ac-show-hidden-files .filetree-child.file.hidden {
 	display: block !important;
 }
 
-body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type {
-	text-decoration: underline;
-}
 .ac-asset-modifiers button.ac-asset-group-button, .ac-asset-modifiers button.ac-select-button {
     box-sizing: border-box;
     appearance: none;
@@ -550,4 +547,20 @@ body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type {
     display: flex;
     align-items: center;
     gap: 5px;
+}
+
+body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type::after {
+    content: " ";
+    margin-left: -2px;
+    background-image: url("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f440.svg");
+    color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    opacity: .9;
+}
+
+body.ac-show-hidden-files .filetree-child.file.active.hidden span.extension-type::after {
+    display: none;
 }
