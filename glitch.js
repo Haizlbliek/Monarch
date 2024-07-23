@@ -70,11 +70,13 @@
 			this.active = false;
 			this.folders = [];
 			this.assetFolderFilePrefix =
-`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!             DO NOT EDIT OR DELETE THIS FILE.               !!!
-!!!         IT IS NEEDED FOR MONARCH TO WORK PROPERLY.         !!!
-!!!     SEE MORE AT  https://github.com/Haizlbliek/Monarch     !!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+`┌──────────────────────────────────────────────────┐
+│                     MONARCH                      │
+├──────────────────────────────────────────────────┤
+│         DO NOT EDIT OR DELETE THIS FILE.         │
+│    IT IS NEEDED FOR MONARCH TO WORK PROPERLY.    │
+│                SEE git.new/monarch               │
+└──────────────────────────────────────────────────┘
 
 `;
 			this.loadFoldersIndex = 0;
