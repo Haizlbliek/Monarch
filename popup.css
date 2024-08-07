@@ -1,0 +1,54 @@
+@import url(https://fonts.bunny.net/css?family=inter:300,400,500,600,700);
+:root {
+  --background: 13, 17, 23;
+  --foreground: 255, 255, 255;
+  --nav: 1, 4, 9;
+}
+
+body,
+html {
+  padding: 0px;
+  margin: 0px;
+  font-family: Inter, sans-serif;
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+}
+h1 {
+  background-color: rgb(var(--nav));
+  padding: 10px;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0px;
+  font-size: 15px;
+  font-weight: 600;
+}
+main {
+  padding: 10px;
+}
+h2 {
+  font-size: 18px;
+  margin-top: 0px;
+}
+select {
+  width: 100%;
+  color: rgb(var(--foreground));
+  background-color: rgba(var(--foreground), 0.05);
+  border: 1px solid rgba(var(--foreground), 0.1);
+  border-radius: 10px;
+  padding: 8px 11px;
+  font-family: inherit;
+  font-size: 12px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='rgba(255, 255, 255, .7)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m7 10l5 5l5-5'/%3E%3C/svg%3E");
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: calc(100% - 11px) center;
+  transition: background-color 0.1s;
+}
+select:hover,
+select:focus {
+  background-color: rgba(var(--foreground), 0.1);
+}
+option {
+  color: rgb(var(--background));
+}

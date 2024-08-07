@@ -1,27 +1,28 @@
 {
-  "name": "Monarch",
-  "version": "4.0",
-  "manifest_version": 3,
-  "permissions": [
-    "scripting",
-    "webNavigation",
-    "storage",
-    "nativeMessaging"
-  ],
-  "host_permissions": [
-  	"https://glitch.com/*"
-  ],
-  "icons": {
-    "48": "Icon33.png",
-    "64": "Icon66.png",
-    "128": "Icon132.png",
-    "256": "Icon264.png"
-  },
-  "action": {
-    "default_title": "Monarch",
-    "default_popup": "popup.html"
-  },
-  "background": {
-    "service_worker": "script.js"
-  }
+	"name": "Monarch",
+	"version": "4.0",
+	"manifest_version": 3,
+	"permissions": [
+		"scripting",
+		"webNavigation",
+		"storage",
+		"nativeMessaging"
+	],
+	"host_permissions": [
+		"https://glitch.com/*"
+	],
+	"icons": {
+		"48": "Icon33.png",
+		"64": "Icon66.png",
+		"128": "Icon132.png",
+		"256": "Icon264.png"
+	},
+	"action": {
+		"default_title": "Monarch",
+		"default_popup": "popup.html"
+	},
+	"background": {
+		"service_worker": "script.js",
+		"scripts": [ "script.js" ]
+	}
 }

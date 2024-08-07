@@ -258,15 +258,9 @@ body {
 	background: transparent;
 }
 
-.ac-select-button.ac-active {
-	animation: 1s infinite normal selectButtonRotate;
-	background: black;
-	color: white;
-	border-color: white;
-}
-
 .ac-selected {
-	outline: 4px solid yellow;
+	outline: 4px solid var(--theme-ui-colors-shareButton);
+    border-radius: 3px;
 }
 
 .css-15i5045.ac-active .css-vurnku {
@@ -524,6 +518,54 @@ body.ac-show-hidden-files .filetree-child.file.hidden {
 	display: block !important;
 }
 
-body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type {
-	text-decoration: underline;
+.ac-asset-modifiers button.ac-asset-group-button, .ac-asset-modifiers button.ac-select-button {
+    box-sizing: border-box;
+    appearance: none;
+    display: inline-block;
+    border: 1px solid transparent;
+    padding: 6px 15px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 11px;
+    color: var(--theme-ui-colors-gray-4);
+    background-color: var(--theme-ui-colors-background);
+    border-radius: 10px;
+}
+
+button.ac-asset-group-button:disabled {
+	opacity: 0.5;
+}
+
+button.ac-select-button.ac-active {
+	animation: 1s infinite normal selectButtonRotate;
+	background: black;
+	color: white;
+	border: 1px solid white;
+}
+
+.ac-asset-scale label {
+    font-size: 13px;
+}
+
+.ac-asset-scale {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+body.ac-show-hidden-files .filetree-child.file.hidden span.extension-type::after {
+    content: " ";
+    margin-left: -2px;
+    background-image: url("https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f440.svg");
+    color: transparent;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    opacity: .9;
+}
+
+body.ac-show-hidden-files .filetree-child.file.active.hidden span.extension-type::after {
+    display: none;
 }

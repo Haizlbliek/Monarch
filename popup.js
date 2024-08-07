@@ -1,17 +1,24 @@
 function send() {
-	var func;
-	var themeName = theme.value;
-	if (themeName == "cosmos") {
-		func = themeCosmos;
-	} else if (themeName == "sugar") {
-		func = themeSugar;
-	} else if (themeName == "pico") {
-		func = themePico;
-	} else if (themeName == "text") {
-		func = themeChromokai;
-	} else if (themeName == "grayscale") {
-		func = themeGrayscale;
+	let func;
+
+	switch (theme.name) {
+		case "cosmos":
+			func = themeCosmos;
+			break;
+		case "sugar":
+			func = themeSugar;
+			break;
+		case "pico":
+			func = themePico;
+			break;
+		case "text":
+			func = themeChromokai;
+			break;
+		case "grayscale":
+			func = themeGrayscale;
+			break;
 	}
+
 	chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
 		chrome.scripting.executeScript({
 			target: {tabId: tabs[0].id},

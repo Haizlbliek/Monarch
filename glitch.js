@@ -16,13 +16,17 @@
 		}
 
 		load() {
-			this._load("assetScale", "ac-asset-scale", toNum);
-			this._load("theme", "ac-theme", toStr);
-			this._load("hiddenFilesShown", "ac-hidden-file-visiblity", toBool);
+			this._load("assetScale", "ac-asset-scale", toNum, 4);
+			this._load("theme", "ac-theme", toStr, "theme-cosmos");
+			this._load("hiddenFilesShown", "ac-hidden-file-visiblity", toBool, false);
 		}
 
-		_load(variableName, storageName, typeFunc) {
-			return (this["_" + variableName] = typeFunc(localStorage.getItem(storageName)));
+		_load(variableName, storageName, typeFunc, defaultValue) {
+			const value = typeFunc(localStorage.getItem(storageName) ?? defaultValue);
+			
+			this["_" + variableName] = value;
+
+			return value;
 		}
 
 		_set(variableName, value, storageName) {
@@ -70,11 +74,13 @@
 			this.active = false;
 			this.folders = [];
 			this.assetFolderFilePrefix =
-`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!             DO NOT EDIT OR DELETE THIS FILE.               !!!
-!!!         IT IS NEEDED FOR MONARCH TO WORK PROPERLY.         !!!
-!!!     SEE MORE AT  https://github.com/Haizlbliek/Monarch     !!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+`┌──────────────────────────────────────────────────┐
+│                     MONARCH                      │
+├──────────────────────────────────────────────────┤
+│         DO NOT EDIT OR DELETE THIS FILE.         │
+│    IT IS NEEDED FOR MONARCH TO WORK PROPERLY.    │
+│                SEE git.new/monarch               │
+└──────────────────────────────────────────────────┘
 
 `;
 			this.loadFoldersIndex = 0;
@@ -204,7 +210,6 @@
 		"setInterval",
 		"setTimeout",
 		"window",
-		"Input",
 		"requestAnimationFrame"
 	];
 
@@ -506,8 +511,8 @@
 
 		assetScaleRange.type = "range";
 		assetScaleRange.min = "1";
-		assetScaleRange.max = "8";
-		assetScaleRange.step = "1";
+		assetScaleRange.max = "9";
+		assetScaleRange.step = "0.1";
 		assetScaleRange.value = settings.assetScale;
 		document.body.style.setProperty("--ac-asset-scale", settings.assetScale);
 		assetScaleRange.oninput = function () {
@@ -811,6 +816,10 @@
 		fullCode += code;
 	}
 
+	function editingString() {
+		return false;
+	}
+
 	function updateCompletions() {
 		if (!autocomplete) return;
 
@@ -823,6 +832,11 @@
 		// code = codeCollect.join("");
 		getAllCode();
 		// console.log(application)
+
+		if (editingString()) {
+			currentCompletion = null;
+			return true;
+		}
 
 		if (fullCode) {
 			fullCode = " " + fullCode;
