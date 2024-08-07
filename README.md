@@ -1,5 +1,5 @@
 # Monarch
-A buggy chrome extension for adding tweaks and autocompletions to the [Glitch](glitch.com) editor
+A buggy chrome extension for adding tweaks and autocompletions to the [Glitch](https://glitch.com) editor
 
 # Installation
 
@@ -37,7 +37,7 @@ A buggy chrome extension for adding tweaks and autocompletions to the [Glitch](g
 ## Why does it have so many errors?
 This project is still in development, so there are many bugs.
 
-## Why is the glitch.com editor crashing?
+### Why is the Glitch editor crashing?
 The code is somewhat funky with including files, so when you open a large file, it usually crashes the extension.
 
 ## What all does it work on?
