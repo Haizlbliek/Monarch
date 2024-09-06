@@ -443,7 +443,7 @@
 		// Remove the "Glitch Autosaves" notification
 		application.notifyAutosave = function () {}
 
-		{ // Show Hidden Files Button
+		/*{ // Show Hidden Files Button
 			const container = document.querySelector(".css-1gga1re");
 			const button = document.createElement("button");
 			const image = document.createElement("img");
@@ -475,7 +475,7 @@
 
 				document.body.classList.add("ac-show-hidden-files");
 			}
-		}
+		}*/
 
 		// .asset-folders file
 		const secretFile = application.fileByPath(ASSET_FOLDER_PATH);
@@ -970,9 +970,9 @@
 
 		if (!started) return;
 
-		if (settings.theme != document.body.classList.item(0)) {
-			settings.theme = document.body.classList.item(0);
-		}
+		// if (settings.theme != document.body.classList.item(0)) {
+		// 	settings.theme = document.body.classList.item(0);
+		// }
 
 
 		var cursor = getCursor();
@@ -1005,6 +1005,132 @@
 			updateCompletionsHandler();
 		}
 		lastEditingText = editingText;
+
+
+		updateSettings();
+	}
+
+	function openMonarchSettings() {
+		const main = document.createElement("div");
+		main.classList.add("overlay-background");
+		main.classList.add("monarch-settings");
+		document.body.appendChild(main);
+
+		const dialogue = document.createElement("dialog");
+		dialogue.classList.add("overlay");
+		dialogue.classList.add("share-embed-overlay");
+		main.appendChild(dialogue);
+
+		const headSection = document.createElement("section");
+		headSection.classList.add("info");
+
+		dialogue.appendChild(headSection);
+
+		const mainSection = document.createElement("section");
+		dialogue.appendChild(mainSection);
+		mainSection.classList.add("section-wrapper");
+		mainSection.innerHTML = `
+<h1>
+	<img src="https://raw.githubusercontent.com/Haizlbliek/Monarch/main/MonarchLogo.png">
+	&nbsp;&nbsp;Monarch Settings&nbsp;&nbsp;
+	<img src="https://raw.githubusercontent.com/Haizlbliek/Monarch/main/MonarchLogo.png">
+</h1>
+
+<h2>Theme</h2>
+<select id="monarchTheme">
+	<option value="theme-cosmos">Cosmos (Default Dark)</option>
+	<option value="theme-sugar" disabled>Sugar (Default Light) DISABLED DUE TO BUGS</option>
+	<option value="theme-text">Chromokai</option>
+	<option value="theme-gray">Grayscale</option>
+</select>
+
+<h2>Files</h2>
+<label for="hiddenFilesVisible">Show Hidden Files</label>
+<input id="hiddenFilesVisible" type="checkbox">
+	`;
+
+		monarchTheme.value = settings.theme;
+		hiddenFilesVisible.checked = settings.hiddenFilesShown;
+
+		monarchTheme.oninput = function () {
+			for (let className of document.body.classList) {
+				if (!className.startsWith("theme-")) continue;
+
+				document.body.classList.remove(className);
+			}
+
+			document.body.classList.add(monarchTheme.value);
+
+			settings.theme = monarchTheme.value;
+		}
+
+		hiddenFilesVisible.oninput = function () {
+			const visible = hiddenFilesVisible.checked;
+
+			if (visible) {
+				document.body.classList.add("ac-show-hidden-files");
+			} else {
+				document.body.classList.remove("ac-show-hidden-files");
+			}
+
+			settings.hiddenFilesShown = visible;
+		}
+
+
+
+		let state = 0;
+		document.body.addEventListener("click", function (e) {
+			if (dialogue.contains(e.target)) return;
+			if (state > 1) return;
+
+			if (state == 0) {
+				state = 1;
+				return;
+			} else {
+				state++;
+			}
+
+			document.body.removeChild(main);
+		});
+	}
+
+	function updateSettings() {
+		const settings = document.querySelector(".css-wccwkd");
+
+		if (!settings) return;
+
+		if (settings.addedMonarchSettings) return;
+
+		settings.addedMonarchSettings = true;
+
+		const group = settings.querySelector(".css-vurnku");
+		const separator = group.querySelectorAll(".css-8wjow8")[1];
+
+		const monarchSettingsButton = document.createElement("div");
+		monarchSettingsButton.classList.add("css-1lpnjm7");
+		monarchSettingsButton.classList.add("custom-settings-button");
+
+		const title = document.createElement("div");
+		title.classList.add("css-11v3wd6");
+		monarchSettingsButton.appendChild(title);
+
+		const text = document.createElement("div");
+		text.classList.add("css-5h0skw");
+		text.innerText = "Monarch Settings";
+		title.appendChild(text);
+		
+		monarchSettingsButton.onclick = function () {
+			openMonarchSettings();
+		}
+
+		group.insertBefore(monarchSettingsButton, separator);
+
+		const darkModeThemeButton = document.getElementById("theme-checkbox");
+		console.log(darkModeThemeButton.ariaChecked == "false");
+		if (darkModeThemeButton.ariaChecked == "false") {
+			darkModeThemeButton.click();
+		}
+		group.removeChild(document.querySelectorAll(".css-1lpnjm7")[9]);
 	}
 
 	function updateCompletionsHandler() {
@@ -1030,6 +1156,7 @@
 
 	document.body.classList.remove(...document.body.classList);
 	document.body.classList.add(settings.theme);
+	if (settings.hiddenFilesShown) document.body.classList.add("ac-show-hidden-files");
 
 	// Tab Autocompletion
 	let Pass = {

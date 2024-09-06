@@ -1,6 +1,6 @@
 {
 	"name": "Monarch",
-	"version": "4.1",
+	"version": "4.2",
 	"manifest_version": 3,
 	"permissions": [
 		"scripting",
@@ -9,17 +9,13 @@
 		"nativeMessaging"
 	],
 	"host_permissions": [
-		"https://glitch.com/*"
+		"https://glitch.com/edit/*"
 	],
 	"icons": {
-		"48": "Icon33.png",
-		"64": "Icon66.png",
-		"128": "Icon132.png",
-		"256": "Icon264.png"
+		"128": "MonarchLogo.png"
 	},
 	"action": {
-		"default_title": "Monarch",
-		"default_popup": "popup.html"
+		"default_title": "Monarch"
 	},
 	"background": {
 		"service_worker": "script.js",

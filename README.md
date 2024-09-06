@@ -1,5 +1,5 @@
 # Monarch
-A buggy chrome extension for adding tweaks and autocompletions to the [Glitch](https://glitch.com) editor
+A buggy chrome extension for adding tweaks, themes, and autocompletions to the [Glitch](https://glitch.com) editor
 
 # Installation
 
@@ -40,7 +40,7 @@ This project is still in development, so there are many bugs.
 ### Why is the Glitch editor crashing?
 The code is somewhat funky with including files, so when you open a large file, it usually crashes the extension.
 
-## What all does it work on?
+## What browsers are compatible?
 This extension is made for chrome. It will probably only work on chrome-based browsers.
 
 ## Why the warnings while installing Monarch?
@@ -66,3 +66,11 @@ Warnings:
 - General improvements to UI
 - Bug fixes
   - The default settings now properly load when installing Monarch for the first time
+
+## 4.2
+- Added a dedicated settings menu for Monarch
+- Moved show/hide hidden files button
+- Fixed up Chromokai theme
+- Removed Pico-8 theme
+- Improved the UI
+- Added Logo
