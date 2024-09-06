@@ -397,14 +397,6 @@ body {
 	color: var(--variable-shim-keyword);
 }
 
-.theme-text .options {
-	background-image: url(/edit/edit/images/background-dark/icons/options.svg);
-}
-
-.theme-text .filetree details>summary.folder-path:before {
-	background: url(/edit/edit/images/background-dark/icons/down-arrow.svg) no-repeat;
-}
-
 
 .theme-gray .options {
 	background-image: url(/edit/edit/images/background-dark/icons/options.svg);
@@ -443,6 +435,69 @@ body {
 	background-color: var(--theme-ui-colors-gray-2);
 }
 
+.theme-monarch {
+	--variable-shim-primary: white !important;
+	--variable-shim-primary-background: #0c0021 !important;
+	--variable-shim-secondary-background: #431f56 !important;
+	--variable-shim-general-link: #431f56;
+	--theme-ui-colors-text: white !important;
+	--variable-shim-text-on-secondary-background: #b19bdc !important;
+    --variable-shim-overlay-background: rgba(0, 0, 0, .5);
+    --theme-ui-colors-backgroundGradient: linear-gradient(45deg, hsl(169.27deg 32.91% 6.67%) 0%, hsl(277.5deg 35.38% 27.89%) 100%) !important;
+    --variable-shim-selection-unfocused-highlight: #b197e277;
+    --variable-shim-selection-highlight: #b197e277;
+
+	--variable-shim-file-logic: #ffae00 !important;
+	--variable-shim-file-styles: #32cd32 !important;
+	--variable-shim-file-view: #da4343 !important;
+	--variable-shim-file-other: #d567cc !important;
+	--variable-shim-file-image: #d6d62a !important;
+
+	--variable-shim-file-logic-secondary: #ffae0033;
+	--variable-shim-file-styles-secondary: #32cd3233;
+	--variable-shim-file-view-secondary: #da434333;
+	--variable-shim-file-other-secondary: #d567cc33;
+	--variable-shim-file-image-secondary: #d6d62a33;
+
+    --theme-ui-colors-blueLight-6: #5e3079;
+
+    --variable-shim-keyword: #b097e2 !important;
+    --variable-shim-operator: white !important;
+    --variable-shim-number: #5ae4e9 !important;
+    --variable-shim-string: #da81db !important;
+    --variable-shim-comment: #716381 !important;
+    --variable-shim-primary: lavender !important;
+    --variable-shim-property: #8d80c6 !important;
+    --variable-shim-gutter-text-color: #797981 !important;
+
+	/*--variable-shim-file-data: lime !important;
+	--variable-shim-file-info: lime !important;
+	--variable-shim-file-env: lime !important;*/
+}
+
+.theme-monarch .CodeMirror-code .cm-tag {
+	color: #d8bcf3;
+}
+
+.theme-monarch .filetree .filetree-child,
+.theme-monarch .filetree .filetree-child.folder summary {
+    border-radius: 5px;
+}
+
+.theme-monarch .pop-over .results-list .result:hover .result-name {
+	color: white !important;
+}
+
+
+.theme-text .options, .theme-monarch .options {
+	background-image: url(/edit/edit/images/background-dark/icons/options.svg);
+}
+
+.theme-text .filetree details>summary.folder-path:before,
+.theme-monarch .filetree details>summary.folder-path:before
+{
+	background: url(/edit/edit/images/background-dark/icons/down-arrow.svg) no-repeat;
+}
 
 
 

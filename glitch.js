@@ -550,7 +550,9 @@
 				assetGroupButton.disabled = true;
 			}
 
-			document.querySelector(".css-15i5045").classList.toggle("ac-active");
+			if (document.querySelector(".css-15i5045")) {
+				document.querySelector(".css-15i5045").classList.toggle("ac-active");
+			}
 
 			for (let node of document.querySelectorAll(".css-vurnku div[type=\"button\"]")) {
 				if (node.acHasClickListener) continue;
@@ -1042,6 +1044,7 @@
 	<option value="theme-sugar" disabled>Sugar (Default Light) DISABLED DUE TO BUGS</option>
 	<option value="theme-text">Chromokai</option>
 	<option value="theme-gray">Grayscale</option>
+	<option value="theme-monarch">Monarch</option>
 </select>
 
 <h2>Files</h2>
@@ -1126,7 +1129,7 @@
 		group.insertBefore(monarchSettingsButton, separator);
 
 		const darkModeThemeButton = document.getElementById("theme-checkbox");
-		
+
 		if (darkModeThemeButton.ariaChecked == "false") {
 			darkModeThemeButton.click();
 		}
