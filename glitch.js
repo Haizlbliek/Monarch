@@ -1126,7 +1126,7 @@
 		group.insertBefore(monarchSettingsButton, separator);
 
 		const darkModeThemeButton = document.getElementById("theme-checkbox");
-		console.log(darkModeThemeButton.ariaChecked == "false");
+		
 		if (darkModeThemeButton.ariaChecked == "false") {
 			darkModeThemeButton.click();
 		}
