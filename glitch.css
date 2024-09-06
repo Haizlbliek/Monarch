@@ -530,6 +530,10 @@ body.ac-show-hidden-files .filetree-child.file.active.hidden span.extension-type
 	text-align: center;
 }
 
+.monarch-settings .section-wrapper h1 img {
+	width: 40px;
+}
+
 .monarch-settings .section-wrapper h2 {
 	font-size: 32px;
 	margin-top: 20px;
