@@ -1,3 +1,5 @@
+<img src="MonarchLogo.png" alt="Monarch Logo" width="200"/>
+
 # Monarch
 A buggy chrome extension for adding tweaks, themes, and autocompletions to the [Glitch](https://glitch.com) editor
 
