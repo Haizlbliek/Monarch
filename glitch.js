@@ -47,6 +47,7 @@
 	var presentation;
 
 	var started = false;
+	let canUserEdit = false;
 
 	var autocomplete;
 
@@ -430,6 +431,8 @@
 		console.clear();
 		started = true;
 
+		canUserEdit = !application.projectIsReadOnlyForCurrentUser();
+
 		// Autocompletion Element
 		autocomplete = document.createElement("div");
 		autocomplete.classList.add("CodeMirror-AutoComplete")
@@ -477,25 +480,55 @@
 			}
 		}*/
 
-		// .asset-folders file
-		const secretFile = application.fileByPath(ASSET_FOLDER_PATH);
-		if (secretFile) {
-			application.ensureSession(secretFile).then(() => {
-				try {
-					const lines = secretFile.I.content.split("\n");
+		if (canUserEdit) {
 
-					assetSelection.loadFolders(JSON.parse(lines[lines.length - 1]));
+			// .asset-folders file
+			const secretFile = application.fileByPath(ASSET_FOLDER_PATH);
+			if (secretFile) {
+				application.ensureSession(secretFile).then(() => {
+					try {
+						const lines = secretFile.I.content.split("\n");
 
-				} catch (e) {
-					console.log("Asset Folder Error: " + e);
-				}
-			});
+						assetSelection.loadFolders(JSON.parse(lines[lines.length - 1]));
+
+					} catch (e) {
+						console.log("Asset Folder Error: " + e);
+					}
+				});
+			} else {
+				application.writeToFile(await application.newFile(ASSET_FOLDER_PATH), assetSelection.assetFolderFilePrefix + "[]");
+				assetSelection.folders = [];
+			}
+
+			// Assets
+			application.showAssets().then(assetsLoaded);
 		} else {
-			application.writeToFile(await application.newFile(ASSET_FOLDER_PATH), assetSelection.assetFolderFilePrefix + "[]");
-			assetSelection.folders = [];
-		}
 
-		application.showAssets().then(assetsLoaded);
+			// Hide "Add File" button
+			document.querySelector(".css-1mbsttu").style.display = "none";
+
+			// Asset Folders
+			const secretFile = application.fileByPath(ASSET_FOLDER_PATH);
+			if (secretFile) {
+				application.ensureSession(secretFile).then(() => {
+					try {
+						const lines = secretFile.I.content.split("\n");
+
+						assetSelection.loadFolders(JSON.parse(lines[lines.length - 1]));
+
+					} catch (e) {
+						console.log("Asset Folder Error: " + e);
+					}
+				});
+
+				application.showAssets().then(() => {
+					assetSelection.loadFolders();
+				});
+			} else {
+				application.showAssets();
+				assetSelection.loadFolders();
+			}
+		}
 	}
 
 	function assetsLoaded() {
@@ -620,7 +653,7 @@
 	}
 
 	function createFolderElement(nodes, addToFile = true, colour = "#dddddd") {
-		const assetsElement = document.querySelector(".assets-wrap").children[1];
+		const assetsElement = document.querySelector(".assets-wrap").children[canUserEdit ? 1 : 0];
 		const folder = document.createElement("div");
 		const folderContent = document.createElement("div");
 		const minimizeButton = document.createElement("div");
@@ -1133,7 +1166,9 @@
 		if (darkModeThemeButton.ariaChecked == "false") {
 			darkModeThemeButton.click();
 		}
-		group.removeChild(document.querySelectorAll(".css-1lpnjm7")[9]);
+		if (canUserEdit) {
+			group.removeChild(document.querySelectorAll(".css-1lpnjm7")[9]);
+		}
 	}
 
 	function updateCompletionsHandler() {

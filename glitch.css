@@ -201,6 +201,7 @@ body {
     transform: scaleX(1);
     margin-top: 2.5px;
     transition: transform 1s, margin-top 1s;
+    line-height: calc(var(--ac-asset-scale)* 20px - 15px);
 }
 
 .ac-minimize-button.ac-minimized div {
@@ -436,6 +437,7 @@ body {
 }
 
 .theme-monarch {
+	--theme-ui-colors-background: #1e0f38;
 	--variable-shim-primary: white !important;
 	--variable-shim-primary-background: #0c0021 !important;
 	--variable-shim-secondary-background: #431f56 !important;
@@ -452,12 +454,14 @@ body {
 	--variable-shim-file-view: #da4343 !important;
 	--variable-shim-file-other: #d567cc !important;
 	--variable-shim-file-image: #d6d62a !important;
+	--variable-shim-file-info: #3ea1d1 !important;
 
 	--variable-shim-file-logic-secondary: #ffae0033;
 	--variable-shim-file-styles-secondary: #32cd3233;
 	--variable-shim-file-view-secondary: #da434333;
 	--variable-shim-file-other-secondary: #d567cc33;
 	--variable-shim-file-image-secondary: #d6d62a33;
+	--variable-shim-file-info-secondary: #3ea1d133;
 
     --theme-ui-colors-blueLight-6: #5e3079;
 
@@ -506,7 +510,7 @@ body {
 
 
 
-body.ac-show-hidden-files .filetree-child.file.hidden {
+body.ac-show-hidden-files .filetree-child.hidden {
 	display: block !important;
 }
 
